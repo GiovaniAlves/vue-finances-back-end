@@ -19,6 +19,24 @@ async function createAccount(_, { description }, context, info) {
    }, info )
 }
 
+
+function createCategory(_, { description, operation }, context, info) { 
+
+   const userId = getUserId(context)
+   return context.db.mutation.createCategory({
+      data: {
+         description,
+         operation,
+         user: {
+            connect: {
+               id: userId
+            }
+         }
+      }
+   }, info )
+}
+
+
 async function login(_, { email, password }, context, info) { 
 
    const user = await context.db.query.user( { where: { email } })
@@ -36,6 +54,7 @@ async function login(_, { email, password }, context, info) {
       user
    }
 }
+
  
 async function signup(_, args, context, info) {
    
@@ -52,6 +71,7 @@ async function signup(_, args, context, info) {
 
 module.exports = {
    createAccount,
+   createCategory,
    login,
    signup
 }
