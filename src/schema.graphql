@@ -1,12 +1,33 @@
+scalar Date
+
 type Query {
   accounts: [ Account! ]!
   categories(operation: Operation): [ Category! ]!
+  records(
+    """
+      Month and Year, format (MM-YYYY) e.g.: 11-2021
+    """
+    month: String,
+    type: Operation,
+    accountsIds: [ ID! ],
+    categoriesIds: [ ID! ]
+  ): [ Record! ]!
   user: User
 }
 
 type Mutation {
   createAccount(description: String!): Account!
   createCategory(description: String!, operation: Operation!): Category!
+  createRecord(
+    accountId: ID!
+    categoryId: ID!
+    amount: Float!
+    type: Operation!
+    date: Date!
+    description: String!
+    tags: String
+    note: String
+  ): Record!
   login(email: String!, password: String!): AuthPayload
   signup(email: String!, password: String!, name: String!): AuthPayload
 }
@@ -38,4 +59,17 @@ type Category {
   user: User
   description: String!
   operation: Operation!
+}
+
+type Record {
+  id: ID!
+  user: User!
+  account: Account!
+  category: Category!
+  amount: Float!
+  type: Operation!
+  date: Date!
+  description: String!
+  tags: String
+  note: String
 }
