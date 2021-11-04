@@ -5,7 +5,7 @@
 ###
 In this project i used Docker to upload containers with Prisma and PostgreSQL images 
 
-###Project setup
+## Project setup
 ```
 docker-compose up
 ```
