@@ -44,14 +44,22 @@ function createRecord(_, args, context, info) {
    if(!date.isValid())
       throw new Error('Invalid date!')
 
+   let { amount, type } = args
+   if(
+      (type === 'DEBIT' && amount > 0) || // +50 => -50
+      (type === 'CREDIT' && amount < 0)   // -50 => +50
+   ){
+      amount = -amount
+   }
+
    const userId = getUserId(context)
    return context.db.mutation.createRecord({
       data: {
          user: { connect: { id: userId } },
          account: { connect: { id: args.accountId } },
          category: { connect: { id: args.categoryId } },
-         amount: args.amount,
-         type: args.type,
+         amount,
+         type,
          date,
          description: args.description,
          tags: args.tags,
